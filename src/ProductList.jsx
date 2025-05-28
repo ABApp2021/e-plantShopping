@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem } from '../redux/CartSlice';
+
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
     const [addedToCart, setAddedToCart] = useState({});
+    const dispatch = useDispatch();
+    const cartItems = useSelector(state => state.cart.cartItems);
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -252,6 +258,7 @@ function ProductList({ onHomeClick }) {
         e.preventDefault();
         setShowCart(false);
     };
+    
     const handleAddToCart = (product) => {
         dispatch(addItem(product)); // Dispatch the action to add the product to the cart (Redux action)
       
@@ -260,6 +267,9 @@ function ProductList({ onHomeClick }) {
           [product.name]: true, // Set the current product's name as a key with value 'true' to mark it as added
         }));
       };
+      const calculateTotalQuantity = () => {
+        return CartItems ? CartItems.reduce((total, item) => total + item.quantity, 0) : 0;
+         };
     return (
         <div>
             <div className="navbar" style={styleObj}>
